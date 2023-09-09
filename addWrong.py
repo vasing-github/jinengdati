@@ -98,33 +98,25 @@ def random_pick(d):
     else:
         return None
 
-def get_random_proxy():
-    response = requests.get(
-        'https://dps.kdlapi.com/api/getdps/?secret_id=o4ym53fttschyim8dqmr&num=1&signature=7j3y140xaf89rcol01837811niu1vhrh&pt=1&sep=1')
-    proxies = {
-        'http': response.text,
-        'https': response.text,
-    }
-    return proxies
+
 i =1
 users = userid.usersall
-proxes = get_random_proxy()
-# proxes =  {'http': 'p774.kdltps.com:15818', 'https': 'p774.kdltps.com:15818'}
+proxes =  userid.getproxies()
 while users:
     user = random_pick(users)
     i += 1
-    if i % 2 == 0:
-        proxes = get_random_proxy()
+    if i % 40 == 0:
+        proxes = userid.getproxies()
     print(i)
     print(proxes)
     try:
         for j in range(5):
             addwrong(user, proxes)
-        # time.sleep(random.randint(2, 5))
+
     except Exception as e:
         print("错了一个",user,proxes)
         print(f'Error: {e}')
-        proxes = get_random_proxy()
+        proxes = userid.getproxies()
         users[user[0]] = user[1]
         continue
 

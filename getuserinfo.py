@@ -45,20 +45,13 @@ def getuserinfos(user,prox):
     # print(response.text)
     print(response.json()['result']['score'])
     # 如果为1就没有答题，0表示今天答题了
-    print(response.json()['result']['is_mn_answer'])
+    # print(response.json()['result']['is_mn_answer'])
     allcode +=  response.json()['result']['score']
-    allgoals = 0
+
     if response.json()['status'] != 200:
         print("cuole")
     return response.json()['result']['is_mn_answer']
-def get_random_proxy():
-    response = requests.get(
-        'https://dps.kdlapi.com/api/getdps/?secret_id=ooszuhbvxvdn3rqdnjv9&num=1&signature=2ju58e5vv5pi1txyb2abr1uwib5aeyqk&pt=1&sep=1')
-    proxies = {
-        'http': response.text,
-        'https': response.text,
-    }
-    return proxies
+
 
 def random_pick(d):
     if d:
@@ -69,13 +62,12 @@ def random_pick(d):
         return None
 i =1
 users = userid.usersall
-# proxes =  {'http': 'p774.kdltps.com:15818', 'https': 'p774.kdltps.com:15818'}
-proxes = get_random_proxy()
+proxes =  userid.getproxies()
 while users:
     user = random_pick(users)
     i += 1
-    if i % 6 == 0:
-        proxes = get_random_proxy()
+    if i % 60 == 0:
+        proxes = userid.getproxies()
     print(i)
     print(proxes)
     try:
@@ -84,7 +76,7 @@ while users:
     except Exception as e:
         print("错了一个",user,proxes)
         print(f'Error: {e}')
-        proxes = get_random_proxy()
+        proxes =  userid.getproxies()
         users[user[0]] = user[1]
         continue
 
